@@ -16,7 +16,7 @@ services:
     volumes:
       - hub10_postgres_dev_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-hub10}"]
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-hub10}" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -24,18 +24,19 @@ services:
   app:
     build:
       context: .
-      target: install        # Only installs deps — no full build for dev
+      target: install # Only installs deps — no full build for dev
     container_name: hub10_app_dev
     restart: unless-stopped
     env_file:
-      - .env                 # Credentials injected at runtime, NOT baked into image
+      - .env # Credentials injected at runtime, NOT baked into image
     environment:
       DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-hub10}
     ports:
       - "${APP_PORT:-3000}:3000"
+      - "5555:5555"
     volumes:
-      - .:/opt/app           # Mount source for hot-reload
-      - /opt/app/node_modules  # Prevent host node_modules from overwriting
+      - .:/opt/app # Mount source for hot-reload
+      - /opt/app/node_modules # Prevent host node_modules from overwriting
     command: npm run start:dev
     depends_on:
       postgres:

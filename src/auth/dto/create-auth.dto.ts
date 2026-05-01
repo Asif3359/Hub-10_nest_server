@@ -3,12 +3,20 @@ import { IsEmail, IsString, MinLength, MaxLength, Matches } from 'class-validato
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateAuthDto {
+    @IsString()
+    @MinLength(2)
+    @MaxLength(50)
+    @ApiProperty({
+        description: 'The name of the user',
+        example: 'John Doe',
+    })
+    name?: string;
     @IsEmail()
     @ApiProperty({
         description: 'The email of the user',
         example: 'test@example.com',
     })
-    email: string;
+    email!: string;
     @IsString()
     @MinLength(8)
     @MaxLength(32)
@@ -19,5 +27,5 @@ export class CreateAuthDto {
         description: 'The password of the user',
         example: 'Password123!',
     })
-    password: string;
+    password!: string;
 }

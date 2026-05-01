@@ -1,25 +1,8 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+A progressive [Node.js](http://nodejs.org) framework for building efficient and scalable server-side applications.
+
+
 
 ## Description
 
@@ -96,3 +79,65 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+Here's a summary of every script:
+
+**App**
+
+
+| Script               | What it does                  |
+| -------------------- | ----------------------------- |
+| `npm run start:dev`  | Hot-reload dev server locally |
+| `npm run build`      | Compile TypeScript            |
+| `npm run start:prod` | Run compiled production build |
+
+
+**Docker**
+
+
+| Script                       | What it does                      |
+| ---------------------------- | --------------------------------- |
+| `npm run docker:up`          | Start containers in background    |
+| `npm run docker:up:build`    | Start + rebuild image             |
+| `npm run docker:down`        | Stop containers                   |
+| `npm run docker:down:v`      | Stop + delete volumes (wipes DB!) |
+| `npm run docker:build`       | Rebuild image only                |
+| `npm run docker:build:fresh` | Rebuild with no cache             |
+| `npm run docker:restart`     | Restart app container only        |
+| `npm run docker:logs`        | Tail app logs                     |
+| `npm run docker:logs:db`     | Tail postgres logs                |
+| `npm run docker:sh`          | Open shell inside app container   |
+| `npm run docker:ps`          | Show container status             |
+
+
+**Database / Prisma**
+
+
+| Script                           | What it does                                |
+| -------------------------------- | ------------------------------------------- |
+| `npm run db:migrate`             | Run migrations (prompts for name)           |
+| `npm run db:migrate:name <name>` | Run migration with given name               |
+| `npm run db:migrate:deploy`      | Apply migrations (CI/prod, no prompt)       |
+| `npm run db:migrate:reset`       | Drop DB and re-run all migrations           |
+| `npm run db:migrate:status`      | Show pending/applied migrations             |
+| `npm run db:generate`            | Regenerate Prisma client in container       |
+| `npm run db:generate:local`      | Regenerate Prisma client locally            |
+| `npm run db:push`                | Push schema without migration (prototyping) |
+| `npm run db:studio`              | Open Prisma Studio GUI                      |
+| `npm run db:format`              | Auto-format schema.prisma                   |
+
+
+**Useful commands going forward:**
+
+
+| Command                          | What it does                         |
+| -------------------------------- | ------------------------------------ |
+| `npm run docker:up`              | Start containers (no rebuild)        |
+| `npm run docker:down`            | Stop containers                      |
+| `npm run docker:logs`            | Follow app logs                      |
+| `npm run docker:sh`              | Open shell inside app container      |
+| `npm run db:migrate:name <name>` | Create + apply a new migration       |
+| `npm run db:generate`            | Regenerate Prisma client             |
+| `npm run docker:down:v`          | Stop + delete DB volume (full reset) |
+
+
