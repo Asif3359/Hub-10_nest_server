@@ -1,0 +1,33 @@
+# Dependencies — reinstalled inside the image
+node_modules
+
+# Build output — rebuilt inside the image
+dist
+generated
+
+# Environment files — NEVER bake secrets into the image
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+
+# Logs
+*.log
+npm-debug.log*
+
+# Tests
+coverage
+test
+
+# Docker files themselves
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Editor / OS
+.vscode
+.idea
+*.DS_Store

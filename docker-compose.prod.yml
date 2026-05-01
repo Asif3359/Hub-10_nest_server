@@ -1,0 +1,55 @@
+# ─────────────────────────────────────────────────────
+# PRODUCTION — multi-stage build, no source code, non-root
+# Usage: docker compose -f docker-compose.prod.yml up -d
+#
+# HOW TO PASS CREDENTIALS (choose one):
+#   Option A — .env file on the server (NOT committed to git):
+#     docker compose -f docker-compose.prod.yml --env-file .env.prod up -d
+#
+#   Option B — Export as shell environment variables (CI/CD pipelines):
+#     export DB_PASSWORD=supersecret JWT_SECRET=myjwtsecret
+#     docker compose -f docker-compose.prod.yml up -d
+#
+#   Option C — Docker secrets (Swarm / advanced):
+#     docker secret create db_password ./db_password.txt
+# ─────────────────────────────────────────────────────
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: hub10_postgres_prod
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - hub10_postgres_prod_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # No external port exposed in production — only the app reaches Postgres
+    expose:
+      - "5432"
+
+  app:
+    build:
+      context: .
+      target: runtime        # Full multi-stage build — lean, no dev tools
+    container_name: hub10_app_prod
+    restart: always
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@postgres:5432/${DB_NAME}
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      APP_PORT: ${APP_PORT:-3000}
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  hub10_postgres_prod_data:

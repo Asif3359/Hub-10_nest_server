@@ -1,0 +1,45 @@
+# ─────────────────────────────────────────────────────
+# DEVELOPMENT — hot-reload, source mounted as volume
+# Usage: docker compose up
+# ─────────────────────────────────────────────────────
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: hub10_postgres_dev
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-hub10}
+    ports:
+      - "${DB_PORT:-5434}:5432"
+    volumes:
+      - hub10_postgres_dev_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-hub10}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      target: install        # Only installs deps — no full build for dev
+    container_name: hub10_app_dev
+    restart: unless-stopped
+    env_file:
+      - .env                 # Credentials injected at runtime, NOT baked into image
+    environment:
+      DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@postgres:5432/${DB_NAME:-hub10}
+    ports:
+      - "${APP_PORT:-3000}:3000"
+    volumes:
+      - .:/opt/app           # Mount source for hot-reload
+      - /opt/app/node_modules  # Prevent host node_modules from overwriting
+    command: npm run start:dev
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  hub10_postgres_dev_data:
