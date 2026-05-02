@@ -14,7 +14,7 @@ import { MailModule } from '../mail/mail.module';
     MailModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET as string ?? 'fallback_secret',
-      signOptions: { expiresIn: parseInt(process.env.JWT_EXPIRES_IN as string) ?? 7 * 24 * 60 * 60 },
+      signOptions: { expiresIn: (process.env.JWT_EXPIRES_IN ?? '7d') as any },
     }),
   ],
   controllers: [AuthController],
